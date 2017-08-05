@@ -1,0 +1,4 @@
+<h4>DEMO: http://ilma.smartdoor.karyateknologi.com</h4>
+cd server 
+bee run
+open localhost:10007
