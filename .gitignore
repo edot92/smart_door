@@ -1,0 +1,10 @@
+server/npm-debug.log
+server/makefile
+server/lastupdate.tmp
+server/debug
+mikro/webclient.zip
+mikro/webclient/.vscode
+clientold
+clientside/node_modules
+clientside/error.log
+clientside/yarn.lock
