@@ -25,9 +25,9 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:EmailController"] = append(beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:EmailController"],
 		beego.ControllerComments{
-			Method: "Getallemail",
-			Router: `/getallemail`,
-			AllowHTTPMethods: []string{"get"},
+			Method: "Addnewemail",
+			Router: `/addnewemail`,
+			AllowHTTPMethods: []string{"post"},
 			MethodParams: param.Make(),
 			Params: nil})
 
@@ -41,9 +41,9 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:EmailController"] = append(beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:EmailController"],
 		beego.ControllerComments{
-			Method: "Addnewemail",
-			Router: `/addnewemail`,
-			AllowHTTPMethods: []string{"post"},
+			Method: "Getallemail",
+			Router: `/getallemail`,
+			AllowHTTPMethods: []string{"get"},
 			MethodParams: param.Make(),
 			Params: nil})
 
@@ -73,9 +73,9 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:UserController"] = append(beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:UserController"],
 		beego.ControllerComments{
-			Method: "Getalluser",
-			Router: `/getalluser`,
-			AllowHTTPMethods: []string{"get"},
+			Method: "AddnewUser",
+			Router: `/addnewuser`,
+			AllowHTTPMethods: []string{"post"},
 			MethodParams: param.Make(),
 			Params: nil})
 
@@ -89,9 +89,9 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:UserController"] = append(beego.GlobalControllerRouter["github.com/edot92/smart_door/server/controllers:UserController"],
 		beego.ControllerComments{
-			Method: "AddnewUser",
-			Router: `/addnewuser`,
-			AllowHTTPMethods: []string{"post"},
+			Method: "Getalluser",
+			Router: `/getalluser`,
+			AllowHTTPMethods: []string{"get"},
 			MethodParams: param.Make(),
 			Params: nil})
 

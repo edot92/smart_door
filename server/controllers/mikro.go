@@ -79,7 +79,7 @@ func (c *MikroController) UpdatelogAlat() {
 				count := len(listEmail)
 				for i := 0; i < count; i++ {
 					fmt.Println("send email")
-					go engine.KirimEmail(listEmail[i].Nama_lengkap, listEmail[i].Email, "SISTEM MIKROKONTROLLER MENDETEKSI KONDISI TIDAK AMAN PADA PUKUL "+date)
+					go engine.KirimEmail(listEmail[i].Nama_lengkap, listEmail[i].Email, "SISTEM MIKROKONTROLLER "+lognya+" PUKUL "+date)
 				}
 			}
 		}()

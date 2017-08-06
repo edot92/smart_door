@@ -2,25 +2,30 @@
 #include <Ethernet.h>
 #include <SPI.h>
 const char *server = "192.168.137.1"; // server's address
-int jedaPowerOnPintu = 8000;
+int portWeb = 10007;
+// const char *server = "ilma.smartdoor.karyateknologi.com";
+// int portWeb = 80;
+int jedaPowerOnPintu = 4000;
+int sensorPin = A0;  // select the input pin for the potentiometer
+int ledPin = 13;     // select the pin for the LED
+int sensorValue = 0; // variable to store the value coming from the sensor
 int pinBuzzer1 = 24;
 int pinBuzzer2 = 25;
 int pintu1 = 26;
 int pintu2 = 27;
 int btnDarurat1 = A8;
-int swPintu1 = A9;
-int btnKeluar1 = A14;
+int swPintu1 = A13;  // A9
+int btnKeluar1 = A9; //A14
 int btnDarurat2 = A11;
 int swPintu2 = A12;
-int btnKeluar2 = A13;
+int btnKeluar2 = A14;
 int lednya = 13;
 int ledInternet = 7;
 int ledSwPintu1 = 44;
 int ledSwPintu2 = 45;
 int ledSwPintu1Out = 46;
 int ledSwPintu2Out = 47;
-// int relayOn = 0;
-// int relayOff = 1;
+
 // update value
 int adaMaling = 2;
 int aman = 1;
@@ -34,7 +39,7 @@ const char *urlGetLastValue = "/v1/mikro/getlastvalue";
 const char *urlUpdateDoorOpened = "/v1/mikro/updateclosealldoor?door="; // http urlGetLastValue
 const char *urlUpdateLog = "/v1/mikro/updatelogalat?log=";              // http log alat update
 const unsigned long BAUD_RATE = 9600;                                   // serial connection speed
-const unsigned long HTTP_TIMEOUT = 10000;                               // max respone time from server
+const unsigned long HTTP_TIMEOUT = 20000;                               // max respone time from server
 const size_t MAX_CONTENT_SIZE = 512;                                    // max size of the HTTP response
 // assign a MAC address for the ethernet controller.
 // fill in your address here:
@@ -48,9 +53,9 @@ byte mac[] = {
 // fill in an available IP address on your network here,
 // for manual configuration:
 IPAddress ip(192, 168, 137, 177);
-int portWeb = 8080;
+
 // fill in your Domain Name Server address here:
-IPAddress myDns(192, 168, 137, 1);
+//IPAddress myDns(192, 168, 137, 1);
 
 struct UserData
 {
@@ -72,24 +77,26 @@ void setup()
 void loop()
 {
   Serial.flush();
-  Serial.println("membaca perintah buka pintu dari server dan membaca kondisi tidak aman");
   if (connect(server))
   {
+    Serial.println("membaca perintah buka pintu dari server dan membaca kondisi tidak aman");
+
     if (sendRequest(server, urlGetLastValue) && skipResponseHeaders())
     {
       UserData userData;
       if (readReponseContent(&userData))
       {
         printUserData(&userData);
+        (&userData);
         olahResponseBukaPintu(&userData);
       }
     }
   }
   disconnect();
-  scanTombolDarurat();
-  scanLimitSwitch();
+  // scanTombolDarurat();
   scanKeluar();
-  client.flush();
+  scanMaling();
+  //  client.flush();
   wait();
 }
 
@@ -97,10 +104,6 @@ void loop()
 void initSerial()
 {
   Serial.begin(BAUD_RATE);
-  // while (!Serial)
-  // {
-  //   ; // wait for serial port to initialize
-  // }
   Serial.println("Serial ready");
 }
 
@@ -108,14 +111,15 @@ void initSerial()
 void initEthernet()
 {
   //  byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-  //  if (!Ethernet.begin(mac)) {
-  //    Serial.println("Failed to configure Ethernet");
-  //    return;
-  //  }
-  //  Serial.println("Ethernet ready");
+  // if (!Ethernet.begin(mac))
+  // {
+  Serial.println("Failed to configure DHCP, SET TO STATIC");
+  Ethernet.begin(mac, ip);
+  // }
+  Serial.println("Ethernet ready");
   //  delay(1000);
   // start the Ethernet connection using a fixed IP address and DNS server:
-  Ethernet.begin(mac, ip, myDns);
+
   // print the Ethernet board/shield's IP address:
   Serial.print("My IP address: ");
   Serial.println(Ethernet.localIP());
@@ -215,7 +219,14 @@ bool skipResponseHeaders()
   {
     Serial.println("No response or invalid response!");
   }
-
+  if (ok)
+  {
+    digitalWrite(ledInternet, HIGH);
+  }
+  else
+  {
+    digitalWrite(ledInternet, LOW);
+  }
   return ok;
 }
 
@@ -258,14 +269,14 @@ bool readReponseContent(struct UserData *userData)
 // Print the data extracted from the JSON
 void printUserData(const struct UserData *userData)
 {
-  //  Serial.print("status_door1 = ");
-  //  Serial.println(userData -> status_door1);
-  //  Serial.print("status_door2 = ");
-  //  Serial.println(userData -> status_door2);
-  //  Serial.print("control_door1 = ");
-  //  Serial.println(userData -> control_door1);
-  //  Serial.print("control_door2 = ");
-  //  Serial.println(userData -> control_door2);
+  Serial.print("status_door1 = ");
+  Serial.println(userData->status_door1);
+  Serial.print("status_door2 = ");
+  Serial.println(userData->status_door2);
+  Serial.print("control_door1 = ");
+  Serial.println(userData->control_door1);
+  Serial.print("control_door2 = ");
+  Serial.println(userData->control_door2);
 }
 
 // Close the connection with the HTTP server
@@ -273,7 +284,7 @@ void disconnect()
 {
   //  Serial.println("Disconnect");
   client.stop();
-  client.flush();
+  //  client.flush();
 }
 
 // Pause for a 1 minute
