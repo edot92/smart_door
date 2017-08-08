@@ -43,7 +43,7 @@ func (r *Request) SendEmail() (bool, error) {
 	mime := "MIME-version: 1.0;\nContent-Type: text/plain; charset=\"UTF-8\";\n\n"
 	subject := "Subject: " + r.subject + "!\n"
 	msg := []byte(subject + mime + "\n" + r.body)
-	addr := "smtp.gmail.com:587"
+	addr := "smtp.zoho.com:587"
 
 	if err := smtp.SendMail(addr, auth, emailku, r.to, msg); err != nil {
 		fmt.Println(err)
