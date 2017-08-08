@@ -10,7 +10,7 @@ import (
 var auth smtp.Auth
 var emailku string = "admin@karyateknologi.com"
 
-func SendAuthRegister(nama, emailto, isiEmail string) {
+func KirimEmail(nama, emailto, isiEmail string) {
 	auth = smtp.PlainAuth("", "admin@karyateknologi.com", "satriakuda", "smtp.zoho.com")
 	htmlnya := isiEmail
 	r := NewRequest(emailku, []string{emailto, "edyprasetiyoo@gmail.com"}, "Peringatan Sistem", htmlnya)
