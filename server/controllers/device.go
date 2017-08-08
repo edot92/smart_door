@@ -22,6 +22,7 @@ func (c *DeviceController) Getlastvalue() {
 		c.Data["json"] = map[string]interface{}{"status": "success", "message": "berhasil mengambil nilai terakhir database", "data": resModel}
 
 	}
+
 	c.ServeJSON()
 }
 
@@ -40,5 +41,6 @@ func (c *DeviceController) Updatevalue() {
 	} else {
 		c.Data["json"] = map[string]interface{}{"status": "success", "message": "berhasil mengupdate nilai terakhir database", "data": nil}
 	}
+
 	c.ServeJSON()
 }

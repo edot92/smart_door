@@ -38,17 +38,24 @@ void scanMaling()
   int adaMaling = 0;
   if (digitalRead(swPintu1) == 0)
   {
-    kirimLogKeweb("sistem_mendeteksi_kondisi_tidak_aman di pintu 1");
-    adaMaling = 1;
+    delay(2000);
+    if (digitalRead(swPintu1) == 0)
+    {
+      kirimLogKeweb("sistem_mendeteksi_kondisi_tidak_aman di pintu");
+      adaMaling = 1;
+    }
   }
   else if (digitalRead(swPintu2) == 0)
   {
-    kirimLogKeweb("sistem_mendeteksi_kondisi_tidak_aman di pintu 2");
-    adaMaling = 2;
+    delay(2000);
+    if (digitalRead(swPintu2) == 0)
+    {
+      kirimLogKeweb("sistem_mendeteksi_kondisi_tidak_aman di pintu");
+      adaMaling = 2;
+    }
   }
   if (adaMaling != 0)
   {
-
     int x = 0;
     while (adaMaling != 0)
     {
@@ -59,7 +66,8 @@ void scanMaling()
         if (digitalRead(btnDarurat1) == 0)
         {
           adaMaling = 0;
-          digitalWrite(pintu1, LOW);
+          digitalWrite(ledSwPintu1Out, HIGH);
+          digitalWrite(pintu1, relayOn);
           delay(3000);
           tungguSWTerkena(1);
           delay(1000);
@@ -70,8 +78,8 @@ void scanMaling()
         if (digitalRead(btnDarurat2) == 0)
         {
           adaMaling = 0;
-          digitalWrite(pintu2, LOW);
-          delay(3000);
+          digitalWrite(ledSwPintu1Out, HIGH);
+          digitalWrite(pintu2, relayOn);
           tungguSWTerkena(2);
           delay(1000);
         }

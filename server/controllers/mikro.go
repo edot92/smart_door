@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -36,10 +37,13 @@ func (c *MikroController) Getlastvalue() {
 		resMikro.StatusDoor2 = "-1"
 		resMikro.ControlDoor1 = "-1"
 		resMikro.ControlDoor2 = "-1"
-		c.Data["json"] = resMikro
+		// c.Data["json"] = resMikro
 	}
-	c.Data["json"] = resMikro
+	// c.Data["json"] = resMikro
+	b, _ := json.Marshal(&resMikro)
+	c.Ctx.WriteString(string(b) + "#")
 	c.ServeJSON()
+
 }
 
 // Getlastvalue ...
@@ -57,6 +61,8 @@ func (c *MikroController) Updateclosealldoor() {
 		return
 	}
 	c.Ctx.WriteString("ok")
+
+	c.Ctx.WriteString("#")
 	return
 
 	// c.Data["json"] =
@@ -87,9 +93,13 @@ func (c *MikroController) UpdatelogAlat() {
 	err := models.UpdatelogAlat(lognya)
 	if err != nil {
 		c.Ctx.WriteString(err.Error())
+
+		c.Ctx.WriteString("#")
 		return
 	}
 	c.Ctx.WriteString("ok")
+
+	c.Ctx.WriteString("#")
 	return
 	// c.Data["json"] =
 	// c.ServeJSON()
